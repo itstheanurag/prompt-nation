@@ -84,7 +84,7 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="max-w-lg mx-auto relative group"
         >
-          <div className="absolute -inset-1 bg-linear-to-r from-purple-500/20 to-blue-500/20 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500" />
+          <div className="absolute -inset-1 bg-linear-to-r from-foreground/10 to-foreground/5 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500" />
           <div className="relative flex items-center gap-3 px-6 py-4 bg-background border border-foreground/10 rounded-full shadow-lg hover:border-foreground/20 transition-colors">
             <Search className="w-5 h-5 text-foreground/40" />
             <input

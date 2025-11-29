@@ -28,7 +28,7 @@ export function HowItWorks() {
   return (
     <section className="container mx-auto px-6 mb-32">
       <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-        <h2 className="text-3xl font-bold tracking-tight">
+        <h2 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2">
           Your Personal AI Workflow
         </h2>
         <p className="text-foreground/60">
@@ -37,20 +37,11 @@ export function HowItWorks() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-8 relative">
-        {/* Connecting Line (Desktop) */}
-        <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-foreground/10 overflow-hidden rounded-full">
-          <motion.div
-            className="absolute top-0 bottom-0 w-24 bg-linear-to-r from-transparent via-foreground to-transparent opacity-80"
-            initial={{ left: "-10%" }}
-            animate={{ left: "110%" }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "linear",
-              repeatDelay: 1,
-            }}
-          />
-        </div>
+        {/* Line Segment 1 (Card 1 to Card 2) */}
+        <div className="hidden md:block absolute top-12 left-[16.66%] w-[33.33%] h-0.5 bg-foreground/5 overflow-hidden" />
+
+        {/* Line Segment 2 (Card 2 to Card 3) */}
+        <div className="hidden md:block absolute top-12 left-[50%] w-[33.33%] h-0.5 bg-foreground/5 overflow-hidden" />
 
         {STEPS.map((step, i) => (
           <motion.div
@@ -67,14 +58,15 @@ export function HowItWorks() {
                 className="absolute inset-0 rounded-2xl bg-foreground/20 blur-xl -z-10"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{
-                  opacity: [0, 1, 0],
-                  scale: [0.8, 1.2, 0.8],
+                  opacity: [0, 1, 1, 0],
+                  scale: [0.8, 1.2, 1.2, 0.8],
                 }}
                 transition={{
-                  duration: 1, // Pulse duration
+                  duration: 3,
+                  times: [0, 0.2, 0.8, 1],
                   repeat: Infinity,
-                  delay: i * 2, // 0s, 2s, 4s - Matches beam position
-                  repeatDelay: 4, // Wait for next cycle (Total 5s cycle matches beam 4s+1s)
+                  repeatDelay: 10.5,
+                  delay: i * 4.5, // 0s, 4.5s, 9s
                 }}
               />
 
