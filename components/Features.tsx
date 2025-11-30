@@ -74,7 +74,7 @@ export function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="group p-8 rounded-2xl bg-foreground/[0.02] border border-foreground/5 hover:bg-foreground/[0.04] transition-colors relative overflow-hidden"
+            className="group p-8 rounded-2xl bg-background border border-foreground/15 hover:border-foreground/30 transition-colors relative overflow-hidden shadow-sm"
           >
             <div className="absolute inset-0 bg-linear-to-br from-purple-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
 
