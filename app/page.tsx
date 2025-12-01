@@ -2,25 +2,22 @@
 
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
-import { Hero } from "@/components/Hero";
-import { HowItWorks } from "@/components/HowItWorks";
-import { PromptCard } from "@/components/PromptCard";
-import { PricingCard } from "@/components/PricingCard";
-import { Footer } from "@/components/Footer";
-import { Features } from "@/components/Features";
-import { AIPromptBuilder } from "@/components/AIPromptBuilder";
-import { PromptFineTuner } from "@/components/PromptFineTuner";
-import { PersonalLibrary } from "@/components/PersonalLibrary";
-import { UseCases } from "@/components/UseCases";
+import { Navbar } from "@/components/navbar";
+import { Hero } from "@/components/hero";
+import { HowItWorks } from "@/components/how-it-works";
+import { PromptCard } from "@/components/prompt-card";
+import { PricingCard } from "@/components/princing-card";
+import { Footer } from "@/components/footer";
+
+import { AIPromptBuilder } from "@/components/ai-promt-builder";
+import { PersonalLibrary } from "@/components/personal-library";
+import { UseCases } from "@/components/use-cases";
 import { PROMPTS, PRICING, CATEGORIES } from "@/data/data";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import {
   DotPatternBackground,
   GridPatternBackground,
-  GlowingOrbsBackground,
-  CircuitBoardBackground,
 } from "@/components/ui/SectionBackgrounds";
 
 export default function Home() {
@@ -41,8 +38,6 @@ export default function Home() {
         <DotPatternBackground>
           <Hero />
         </DotPatternBackground>
-
-        <Features />
 
         <AIPromptBuilder />
 
