@@ -7,7 +7,7 @@ import { GridPatternBackground } from "@/components/ui/SectionBackgrounds";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { useAuthStore } from "@/lib/store";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { authClient } from "./auth-client";
+import { authClient } from "../lib/auth-client";
 
 interface AuthState {
   user: typeof authClient.$Infer.Session.user | null;
