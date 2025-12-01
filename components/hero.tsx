@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { ArrowRight, Sparkles, Search, Command } from "lucide-react";
-import { PromptFineTuner } from "./PromptFineTuner";
+import { PromptFineTuner } from "./prompt-finer";
 
 const FLOATING_CARDS = [
   { text: "Cyberpunk City", x: -20, y: -10, delay: 0 },
