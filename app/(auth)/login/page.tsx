@@ -2,10 +2,61 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { ArrowLeft, Mail, Lock, Github, Chrome } from "lucide-react";
+import { ArrowLeft, Mail, Lock, Github, Chrome, Loader2 } from "lucide-react";
 import { GridPatternBackground } from "@/components/ui/SectionBackgrounds";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { useAuthStore } from "@/lib/store";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { signIn: storeSignIn } = useAuthStore();
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await authClient.signIn.email(
+        {
+          email,
+          password,
+        },
+        {
+          onSuccess: () => {
+            router.push("/dashboard");
+          },
+          onError: (ctx) => {
+            alert(ctx.error.message);
+            setLoading(false);
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+  };
+
+  const handleSocialSignIn = async (provider: "github" | "google") => {
+    await authClient.signIn.social(
+      {
+        provider,
+      },
+      {
+        onSuccess: () => {
+          router.push("/dashboard");
+        },
+        onError: (ctx) => {
+          alert(ctx.error.message);
+        },
+      }
+    );
+  };
+
   return (
     <GridPatternBackground className="min-h-screen flex items-center justify-center p-6">
       <div className="w-full max-w-md">
@@ -31,7 +82,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-4" onSubmit={handleSignIn}>
             <div className="space-y-2">
               <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 Email
@@ -40,8 +91,11 @@ export default function LoginPage() {
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-foreground/40" />
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
                   className="flex h-10 w-full rounded-md border border-foreground/10 bg-foreground/5 px-3 py-2 pl-10 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-foreground/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  required
                 />
               </div>
             </div>
@@ -53,13 +107,22 @@ export default function LoginPage() {
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-foreground/40" />
                 <input
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="flex h-10 w-full rounded-md border border-foreground/10 bg-foreground/5 px-3 py-2 pl-10 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-foreground/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  required
                 />
               </div>
             </div>
 
-            <button className="w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-foreground text-background hover:bg-foreground/90 h-10 px-4 py-2">
+            <button
+              disabled={loading}
+              className="w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-foreground text-background hover:bg-foreground/90 h-10 px-4 py-2"
+            >
+              {loading ? (
+                <Loader2 className="animate-spin mr-2 h-4 w-4" />
+              ) : null}
               Sign In
             </button>
           </form>
@@ -76,11 +139,17 @@ export default function LoginPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-foreground/10 bg-background hover:bg-foreground/5 hover:text-foreground h-10 px-4 py-2">
+            <button
+              onClick={() => handleSocialSignIn("github")}
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-foreground/10 bg-background hover:bg-foreground/5 hover:text-foreground h-10 px-4 py-2"
+            >
               <Github className="mr-2 h-4 w-4" />
               Github
             </button>
-            <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-foreground/10 bg-background hover:bg-foreground/5 hover:text-foreground h-10 px-4 py-2">
+            <button
+              onClick={() => handleSocialSignIn("google")}
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-foreground/10 bg-background hover:bg-foreground/5 hover:text-foreground h-10 px-4 py-2"
+            >
               <Chrome className="mr-2 h-4 w-4" />
               Google
             </button>
