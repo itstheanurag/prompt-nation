@@ -2,19 +2,23 @@
 
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
-import { Hero } from "@/components/Hero";
-import { HowItWorks } from "@/components/HowItWorks";
-import { PromptCard } from "@/components/PromptCard";
-import { PricingCard } from "@/components/PricingCard";
-import { Footer } from "@/components/Footer";
-import { Features } from "@/components/Features";
-import { AIPromptBuilder } from "@/components/AIPromptBuilder";
-import { PersonalLibrary } from "@/components/PersonalLibrary";
-import { UseCases } from "@/components/UseCases";
-import { PROMPTS, PRICING, CATEGORIES } from "@/lib/data";
+import { Navbar } from "@/components/navbar";
+import { Hero } from "@/components/hero";
+import { HowItWorks } from "@/components/how-it-works";
+import { PromptCard } from "@/components/prompt-card";
+import { PricingCard } from "@/components/princing-card";
+import { Footer } from "@/components/footer";
+
+import { AIPromptBuilder } from "@/components/ai-promt-builder";
+import { PersonalLibrary } from "@/components/personal-library";
+import { UseCases } from "@/components/use-cases";
+import { PROMPTS, PRICING, CATEGORIES } from "@/data/data";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
+import {
+  DotPatternBackground,
+  GridPatternBackground,
+} from "@/components/ui/SectionBackgrounds";
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -27,22 +31,19 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-foreground selection:text-background overflow-x-hidden relative">
       {/* Background Elements */}
-      <div className="fixed inset-0 z-[-1] pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]" />
-        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-foreground opacity-[0.03] blur-[100px]" />
-        <div className="absolute right-0 bottom-0 -z-10 h-[310px] w-[310px] rounded-full bg-foreground opacity-[0.03] blur-[100px]" />
-      </div>
 
       <Navbar />
 
       <main className="pt-32 pb-20">
-        <Hero />
-
-        <Features />
+        <DotPatternBackground>
+          <Hero />
+        </DotPatternBackground>
 
         <AIPromptBuilder />
 
-        <PersonalLibrary />
+        <GridPatternBackground>
+          <PersonalLibrary />
+        </GridPatternBackground>
 
         {/* Prompt Showcase Section */}
         <section className="container mx-auto px-6 py-24">
@@ -94,7 +95,7 @@ export default function Home() {
 
         {/* Pricing Section */}
         <section className="container mx-auto px-6 py-20 relative overflow-hidden">
-          <div className="absolute inset-0 bg-foreground/[0.02] rounded-3xl -z-10" />
+          <div className="absolute inset-0 bg-foreground/2 rounded-3xl -z-10" />
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
             <h2 className="text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2">
               Simple, Transparent Pricing

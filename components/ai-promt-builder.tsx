@@ -96,6 +96,11 @@ export function AIPromptBuilder() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
+            onClick={() => {
+              document
+                .getElementById("prompt-fine-tuner")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
             className="px-8 py-4 bg-foreground text-background rounded-full font-medium hover:opacity-90 transition-all flex items-center gap-2 group"
           >
             Try AI Builder
@@ -113,7 +118,7 @@ export function AIPromptBuilder() {
           <div className="absolute -inset-4 bg-linear-to-r from-purple-500/20 to-blue-500/20 rounded-3xl blur-xl opacity-50" />
           <div className="relative bg-background border border-foreground/10 rounded-2xl shadow-2xl overflow-hidden">
             {/* Header */}
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-foreground/5 bg-foreground/[0.02]">
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-foreground/5 bg-foreground/2">
               <div className="flex gap-1.5">
                 <div className="w-3 h-3 rounded-full bg-red-500/20" />
                 <div className="w-3 h-3 rounded-full bg-yellow-500/20" />

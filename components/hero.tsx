@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { ArrowRight, Sparkles, Search, Command } from "lucide-react";
+import { PromptFineTuner } from "./prompt-finer";
 
 const FLOATING_CARDS = [
   { text: "Cyberpunk City", x: -20, y: -10, delay: 0 },
@@ -77,33 +78,21 @@ export function Hero() {
           and build your personal library of intelligence.
         </motion.p>
 
-        {/* Mock Search Bar */}
+        {/* Prompt Fine Tuner Widget */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="max-w-lg mx-auto relative group"
+          className="max-w-4xl mx-auto mt-12"
         >
-          <div className="absolute -inset-1 bg-linear-to-r from-foreground/10 to-foreground/5 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500" />
-          <div className="relative flex items-center gap-3 px-6 py-4 bg-background border border-foreground/10 rounded-full shadow-lg hover:border-foreground/20 transition-colors">
-            <Search className="w-5 h-5 text-foreground/40" />
-            <input
-              type="text"
-              placeholder="Search for 'cyberpunk city'..."
-              className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-foreground/40"
-              disabled
-            />
-            <div className="hidden md:flex items-center gap-1 px-2 py-1 bg-foreground/5 rounded text-xs text-foreground/40 font-mono">
-              <Command className="w-3 h-3" /> K
-            </div>
-          </div>
+          <PromptFineTuner showHeader={false} className="py-0" />
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex flex-col items-center gap-12 pt-8"
+          className="flex flex-col items-center gap-12 pt-12"
         >
           <button className="px-8 py-4 bg-foreground text-background rounded-full font-medium hover:opacity-90 transition-all flex items-center gap-2 group shadow-lg shadow-foreground/20">
             Start Exploring
