@@ -66,7 +66,7 @@ export function PromptFineTuner({
     <section
       id="prompt-fine-tuner"
       className={cn(
-        "container mx-auto px-6 py-24 relative overflow-hidden",
+        "container mx-auto px-2 py-24 relative overflow-hidden",
         className
       )}
     >
@@ -131,7 +131,7 @@ export function PromptFineTuner({
                     <button
                       key={prompt}
                       onClick={() => setInput(prompt)}
-                      className="text-[10px] px-2 py-1 md:text-xs md:px-3 md:py-1.5 rounded-full bg-foreground/5 text-foreground/60 hover:bg-foreground/10 hover:text-foreground transition-colors border border-transparent hover:border-foreground/10"
+                      className="text-[4px] px-2 py-1 sm:px-3 sm:py-1.5 rounded-full bg-foreground/5 text-foreground/60 hover:bg-foreground/10 hover:text-foreground transition-colors border border-transparent hover:border-foreground/10"
                     >
                       {prompt}
                     </button>
