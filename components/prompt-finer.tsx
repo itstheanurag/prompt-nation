@@ -119,7 +119,7 @@ export function PromptFineTuner({
           transition={{ delay: 0.3 }}
           className="bg-background/50 backdrop-blur-xl border border-foreground/10 rounded-3xl p-2 shadow-2xl"
         >
-          <div className="bg-background rounded-2xl border border-foreground/5 p-6 space-y-6">
+          <div className="bg-background rounded-2xl border border-foreground/5 p-2 space-y-6">
             {/* Input Area */}
             <div className="space-y-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -131,7 +131,7 @@ export function PromptFineTuner({
                     <button
                       key={prompt}
                       onClick={() => setInput(prompt)}
-                      className="text-xs px-3 py-1.5 rounded-full bg-foreground/5 text-foreground/60 hover:bg-foreground/10 hover:text-foreground transition-colors border border-transparent hover:border-foreground/10"
+                      className="text-[10px] px-2 py-1 md:text-xs md:px-3 md:py-1.5 rounded-full bg-foreground/5 text-foreground/60 hover:bg-foreground/10 hover:text-foreground transition-colors border border-transparent hover:border-foreground/10"
                     >
                       {prompt}
                     </button>
@@ -141,14 +141,18 @@ export function PromptFineTuner({
               <div className="relative">
                 <textarea
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setInput(value);
+                    if (!value.trim()) setOutput(null);
+                  }}
                   placeholder="e.g., Create a modern looking gym website, use this and that tech stack..."
-                  className="w-full h-32 bg-foreground/[0.03] border border-foreground/10 rounded-xl p-4 text-foreground placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none transition-all"
+                  className="w-full h-32 bg-foreground/3 border border-foreground/10 rounded-xl p-4 text-foreground placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none transition-all"
                 />
                 <button
                   onClick={handleGenerate}
                   disabled={isLoading || !input.trim()}
-                  className="absolute bottom-4 right-4 px-4 py-2 bg-foreground text-background rounded-lg font-medium text-sm hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+                  className="absolute bottom-4 right-4 px-3 py-1.5 md:px-4 md:py-2 bg-foreground text-background rounded-lg font-medium text-xs md:text-sm hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
                 >
                   {isLoading ? (
                     <>
