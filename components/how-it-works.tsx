@@ -28,10 +28,10 @@ export function HowItWorks() {
   return (
     <section className="container mx-auto px-6 mb-32">
       <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-        <h2 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2">
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2">
           Your Personal AI Workflow
         </h2>
-        <p className="text-foreground/60">
+        <p className="text-sm md:text-base text-foreground/60">
           Streamline how you interact with Artificial Intelligence.
         </p>
       </div>
@@ -78,7 +78,7 @@ export function HowItWorks() {
 
             <div className="pt-4">
               <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-              <p className="text-foreground/60 leading-relaxed max-w-xs mx-auto">
+              <p className="text-sm md:text-base text-foreground/60 leading-relaxed max-w-xs mx-auto">
                 {step.description}
               </p>
             </div>

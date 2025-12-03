@@ -34,7 +34,7 @@ export default function Home() {
 
       <Navbar />
 
-      <main className="pt-32 pb-20">
+      <main className="pt-24 md:pt-32 pb-20">
         <DotPatternBackground>
           <Hero />
         </DotPatternBackground>
@@ -46,7 +46,7 @@ export default function Home() {
         </GridPatternBackground>
 
         {/* Prompt Showcase Section */}
-        <section className="container mx-auto px-6 py-24">
+        <section className="container mx-auto px-6 py-12 md:py-24">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
             <h2 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2">
               Featured Prompts
@@ -97,10 +97,10 @@ export default function Home() {
         <section className="container mx-auto px-6 py-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-foreground/2 rounded-3xl -z-10" />
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-            <h2 className="text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2">
               Simple, Transparent Pricing
             </h2>
-            <p className="text-foreground/60">
+            <p className="text-sm md:text-base text-foreground/60">
               Start for free, upgrade when you need more power.
             </p>
           </div>

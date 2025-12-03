@@ -35,8 +35,8 @@ export function AIPromptBuilder() {
   }, []);
 
   return (
-    <section className="container mx-auto px-6 py-24">
-      <div className="grid lg:grid-cols-2 gap-16 items-center">
+    <section className="container mx-auto px-6 py-12 md:py-24">
+      <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
         <div className="space-y-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -52,7 +52,7 @@ export function AIPromptBuilder() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold tracking-tight leading-tight bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2"
+            className="text-3xl md:text-5xl font-bold tracking-tight leading-tight bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2"
           >
             Turn vague ideas into <br />
             engineering masterpieces
@@ -63,7 +63,7 @@ export function AIPromptBuilder() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-foreground/60 leading-relaxed"
+            className="text-sm md:text-lg text-foreground/60 leading-relaxed"
           >
             Struggling to get the right output? Our AI assistant analyzes your
             intent, suggests specific improvements, and helps you craft the
@@ -129,7 +129,7 @@ export function AIPromptBuilder() {
               </div>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-4 md:p-6 space-y-4 md:space-y-6">
               {/* Chat Interface */}
               <div className="space-y-4">
                 <div className="flex gap-4">
@@ -137,8 +137,8 @@ export function AIPromptBuilder() {
                     <div className="w-4 h-4 rounded-full bg-foreground/20" />
                   </div>
                   <div className="flex-1 space-y-2">
-                    <div className="bg-foreground/5 rounded-2xl rounded-tl-none px-4 py-3 text-sm">
-                      <p className="text-foreground/60 mb-1 text-xs uppercase tracking-wider font-bold">
+                    <div className="bg-foreground/5 rounded-2xl rounded-tl-none px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm">
+                      <p className="text-foreground/60 mb-1 text-[10px] md:text-xs uppercase tracking-wider font-bold">
                         Input
                       </p>
                       {DEMO_STEPS[step].input}
@@ -151,11 +151,11 @@ export function AIPromptBuilder() {
                     <Sparkles className="w-4 h-4 text-purple-500" />
                   </div>
                   <div className="flex-1 space-y-2">
-                    <div className="bg-purple-500/5 border border-purple-500/10 rounded-2xl rounded-tr-none px-4 py-3 text-sm relative">
-                      <div className="absolute -top-3 right-4 bg-purple-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider shadow-sm">
+                    <div className="bg-purple-500/5 border border-purple-500/10 rounded-2xl rounded-tr-none px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm relative">
+                      <div className="absolute -top-2 md:-top-3 right-2 md:right-4 bg-purple-500 text-white text-[9px] md:text-[10px] px-1.5 py-0.5 md:px-2 md:py-0.5 rounded-full font-bold uppercase tracking-wider shadow-sm">
                         {DEMO_STEPS[step].status}
                       </div>
-                      <p className="text-purple-500/60 mb-1 text-xs uppercase tracking-wider font-bold">
+                      <p className="text-purple-500/60 mb-1 text-[10px] md:text-xs uppercase tracking-wider font-bold">
                         Optimized Prompt
                       </p>
                       <motion.p

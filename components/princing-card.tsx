@@ -44,7 +44,7 @@ export function PricingCard({ plan, index }: PricingCardProps) {
             <span className="text-foreground/40 text-sm">/month</span>
           )}
         </div>
-        <p className="text-sm text-foreground/60 leading-relaxed">
+        <p className="text-xs md:text-sm text-foreground/60 leading-relaxed">
           {plan.description}
         </p>
       </div>

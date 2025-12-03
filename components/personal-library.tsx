@@ -26,8 +26,8 @@ const SAVED_PROMPTS = [
 
 export function PersonalLibrary() {
   return (
-    <section className="container mx-auto px-6 py-24 bg-foreground/[0.02] border-y border-foreground/5">
-      <div className="grid lg:grid-cols-2 gap-16 items-center">
+    <section className="container mx-auto px-6 py-12 md:py-24 bg-foreground/2 border-y border-foreground/5">
+      <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
         {/* UI Mockup */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -39,8 +39,8 @@ export function PersonalLibrary() {
 
           <div className="relative bg-background border border-foreground/10 rounded-2xl shadow-2xl overflow-hidden">
             {/* Sidebar Mock */}
-            <div className="flex h-[400px]">
-              <div className="w-16 border-r border-foreground/5 flex flex-col items-center py-6 gap-6 bg-foreground/[0.02]">
+            <div className="flex h-[300px] md:h-[400px]">
+              <div className="w-16 border-r border-foreground/5 flex flex-col items-center py-6 gap-6 bg-foreground/2">
                 <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
                   <FolderHeart className="w-4 h-4 text-blue-500" />
                 </div>
@@ -49,7 +49,7 @@ export function PersonalLibrary() {
                 <div className="mt-auto w-8 h-8 rounded-full bg-foreground/10" />
               </div>
 
-              <div className="flex-1 p-6">
+              <div className="flex-1 p-4 md:p-6">
                 <div className="flex items-center justify-between mb-8">
                   <h3 className="font-bold text-lg">My Collections</h3>
                   <div className="p-2 rounded-lg bg-foreground/5">
@@ -113,9 +113,9 @@ export function PersonalLibrary() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold tracking-tight leading-tight bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2"
+            className="text-3xl md:text-5xl font-bold tracking-tight leading-tight bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2"
           >
-            Your personal <br />
+            Your personal <br className="hidden md:block" />
             knowledge base
           </motion.h2>
 
@@ -124,7 +124,7 @@ export function PersonalLibrary() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-foreground/60 leading-relaxed"
+            className="text-sm md:text-lg text-foreground/60 leading-relaxed"
           >
             Never lose a great prompt again. Save, organize, and categorize your
             prompts for easy access. Build a library of reusable intelligence
@@ -154,7 +154,9 @@ export function PersonalLibrary() {
               >
                 <feature.icon className="w-6 h-6 text-blue-500 mb-3" />
                 <h4 className="font-bold mb-1">{feature.title}</h4>
-                <p className="text-sm text-foreground/60">{feature.desc}</p>
+                <p className="text-xs md:text-sm text-foreground/60">
+                  {feature.desc}
+                </p>
               </motion.div>
             ))}
           </div>

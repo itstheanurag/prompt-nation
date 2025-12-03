@@ -46,7 +46,7 @@ const USE_CASES = [
 
 export function UseCases() {
   return (
-    <section className="container mx-auto px-6 py-24">
+    <section className="container mx-auto px-6 py-12 md:py-24">
       <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -67,7 +67,7 @@ export function UseCases() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="group p-6 rounded-2xl bg-foreground/[0.02] border border-foreground/5 hover:border-foreground/10 hover:bg-foreground/[0.04] transition-all cursor-pointer"
+            className="group p-6 rounded-2xl bg-foreground/2 border border-foreground/5 hover:border-foreground/10 hover:bg-foreground/4 transition-all cursor-pointer"
           >
             <div
               className={`w-12 h-12 rounded-xl ${useCase.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
@@ -78,7 +78,7 @@ export function UseCases() {
             <h3 className="text-xl font-bold mb-3 group-hover:text-foreground transition-colors">
               {useCase.title}
             </h3>
-            <p className="text-foreground/60 text-sm leading-relaxed mb-6">
+            <p className="text-foreground/60 text-xs md:text-sm leading-relaxed mb-6">
               {useCase.description}
             </p>
 

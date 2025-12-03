@@ -15,7 +15,7 @@ export function Hero() {
   return (
     <section className="relative container mx-auto px-6 mb-32 pt-10">
       {/* Floating Background Elements */}
-      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+      <div className="hidden md:block absolute inset-0 -z-10 overflow-hidden pointer-events-none">
         {FLOATING_CARDS.map((card, i) => (
           <motion.div
             key={i}
@@ -61,7 +61,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-6xl md:text-8xl font-bold tracking-tighter text-balance bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2"
+          className="text-4xl md:text-6xl lg:text-8xl font-bold tracking-tighter text-balance bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/50 pb-2"
         >
           Curate. Share. <br />
           Master AI.
@@ -71,7 +71,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-xl text-foreground/60 max-w-2xl mx-auto leading-relaxed"
+          className="text-sm md:text-xl text-foreground/60 max-w-2xl mx-auto leading-relaxed"
         >
           A community-driven collection of high-quality prompts for Images,
           Videos, Essays, and Research. Document your results, tag the models,
@@ -100,7 +100,7 @@ export function Hero() {
           </button>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 md:gap-16 border-t border-foreground/10 pt-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 border-t border-foreground/10 pt-8 w-full md:w-auto">
             {[
               { label: "Prompts", value: "10k+" },
               { label: "Models", value: "50+" },
