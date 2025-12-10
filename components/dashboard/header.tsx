@@ -1,0 +1,72 @@
+"use client";
+
+import { useAuthStore } from "@/stores";
+import { Menu, LogOut } from "lucide-react";
+import { useEffect } from "react";
+import { useUIStore } from "@/stores/ui-store";
+import { useRouter } from "next/navigation";
+
+
+export function Header() {
+  const { user, fetchSession, signOut } = useAuthStore();
+  const { toggleSidebar } = useUIStore();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/");
+  };
+
+  useEffect(() => {
+    fetchSession();
+  }, [fetchSession]);
+
+  return (
+    <header className="h-16 border-b border-foreground/10 bg-background/80 backdrop-blur-xl sticky top-0 z-20 px-6 flex items-center justify-between">
+      <div className="flex items-center gap-4 flex-1">
+        <button
+          onClick={toggleSidebar}
+          className="md:hidden p-2 -ml-2 hover:bg-foreground/5 rounded-md text-foreground/60 hover:text-foreground transition-colors"
+        >
+          <Menu size={20} />
+        </button>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 pl-4 relative group cursor-pointer">
+          <div className="w-9 h-9 rounded-full bg-foreground/10 flex items-center justify-center text-foreground font-medium border border-foreground/10 overflow-hidden">
+            {user?.image ? (
+              <img
+                src={user.image}
+                alt={user.name || "User"}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              user?.name?.[0]?.toUpperCase() || "U"
+            )}
+          </div>
+
+          {/* Tooltip Dropdown */}
+          <div className="absolute top-full right-0 mt-2 w-48 p-3 bg-background border border-foreground/10 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right z-50">
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-foreground truncate">
+                {user?.name || "User"}
+              </p>
+              <p className="text-xs text-foreground/60 truncate">
+                {user?.email || ""}
+              </p>
+              <div className="h-px bg-foreground/10 my-2" />
+              <button
+                onClick={handleSignOut}
+                className="w-full text-left text-xs text-red-500 hover:bg-red-500/10 p-1.5 rounded-md transition-colors flex items-center gap-2"
+              >
+                <LogOut size={14} />
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
