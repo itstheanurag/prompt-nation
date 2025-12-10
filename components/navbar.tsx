@@ -5,10 +5,11 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { Terminal, Menu, X } from "lucide-react";
 import { AuthModal } from "./modals/auth-modal";
+import { useUIStore } from "@/stores/ui-store";
 
 export function Navbar() {
+  const { isAuthModalOpen, openAuthModal, closeAuthModal } = useUIStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   return (
     <>
@@ -40,7 +41,7 @@ export function Navbar() {
               Pricing
             </Link>
             <button
-              onClick={() => setIsAuthModalOpen(true)}
+              onClick={openAuthModal}
               className="px-4 py-2 bg-foreground text-background rounded-full hover:opacity-90 transition-opacity"
             >
               Get Started
@@ -88,7 +89,7 @@ export function Navbar() {
                   className="px-4 py-3 bg-foreground text-background rounded-full hover:opacity-90 transition-opacity font-medium"
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    setIsAuthModalOpen(true);
+                    openAuthModal();
                   }}
                 >
                   Get Started
@@ -101,7 +102,7 @@ export function Navbar() {
 
       <AuthModal
         isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
+        onClose={closeAuthModal}
       />
     </>
   );

@@ -1,12 +1,12 @@
 "use client";
 
 import { useAuthStore } from "@/stores";
-import { Menu } from "lucide-react";
+import { Menu, LogOut } from "lucide-react";
 import { useEffect } from "react";
 import { useUIStore } from "@/stores/ui-store";
 
 export function Header() {
-  const { user, fetchSession } = useAuthStore();
+  const { user, fetchSession, signOut } = useAuthStore();
   const { toggleSidebar } = useUIStore();
 
   useEffect(() => {
@@ -47,6 +47,14 @@ export function Header() {
               <p className="text-xs text-foreground/60 truncate">
                 {user?.email || ""}
               </p>
+              <div className="h-px bg-foreground/10 my-2" />
+              <button
+                onClick={() => signOut()}
+                className="w-full text-left text-xs text-red-500 hover:bg-red-500/10 p-1.5 rounded-md transition-colors flex items-center gap-2"
+              >
+                <LogOut size={14} />
+                Sign Out
+              </button>
             </div>
           </div>
         </div>

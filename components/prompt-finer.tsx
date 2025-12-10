@@ -19,6 +19,10 @@ import {
   EXAMPLE_PROMPTS,
   OutputFormat,
 } from "@/data/prompts";
+import { useAuthStore } from "@/stores";
+import { useUIStore } from "@/stores/ui-store";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function PromptFineTuner({
   showHeader = true,
@@ -35,8 +39,37 @@ export function PromptFineTuner({
   const [activeTab, setActiveTab] = useState<OutputFormat>("text");
   const [copied, setCopied] = useState(false);
 
+  const { user } = useAuthStore();
+  const { openAuthModal } = useUIStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check for saved prompt on mount (only if on dashboard)
+    if (window.location.pathname.includes("/dashboard")) {
+      const savedPrompt = localStorage.getItem("fineTunerPrompt");
+      if (savedPrompt) {
+        setInput(savedPrompt);
+        localStorage.removeItem("fineTunerPrompt");
+      }
+    }
+  }, []);
+
   const handleGenerate = async () => {
     if (!input.trim()) return;
+
+    // Auth check for home page usage
+    if (!user) {
+      localStorage.setItem("fineTunerPrompt", input);
+      openAuthModal();
+      return;
+    }
+
+    // If on home page and logged in, redirect to dashboard fine tuner
+    if (!window.location.pathname.includes("/dashboard")) {
+      localStorage.setItem("fineTunerPrompt", input);
+      router.push("/dashboard/fine-tuner");
+      return;
+    }
 
     setIsLoading(true);
     // Simulate API delay
@@ -131,7 +164,7 @@ export function PromptFineTuner({
                     <button
                       key={prompt}
                       onClick={() => setInput(prompt)}
-                      className="text-[4px] px-2 py-1 sm:px-3 sm:py-1.5 rounded-full bg-foreground/5 text-foreground/60 hover:bg-foreground/10 hover:text-foreground transition-colors border border-transparent hover:border-foreground/10"
+                      className="text-xs md:text-sm px-2 py-1 sm:px-3 sm:py-1.5 rounded-full bg-foreground/5 text-foreground/60 hover:bg-foreground/10 hover:text-foreground transition-colors border border-transparent hover:border-foreground/10"
                     >
                       {prompt}
                     </button>

@@ -83,7 +83,7 @@ export function Sidebar() {
           width: isCollapsed ? 80 : 360,
         }}
         className={cn(
-          "fixed inset-y-0 left-0 z-100 flex flex-col border-r border-foreground/10 bg-background/80 backdrop-blur-xl transition-transform duration-300 md:translate-x-0 md:sticky md:top-0 md:h-screen md:z-30",
+          "fixed inset-y-0 left-0 z-100 flex flex-col border-r border-foreground/10 bg-background/80 backdrop-blur-xl transition-transform duration-300 md:translate-x-0 md:sticky md:top-0 md:h-screen md:z-30 overflow-hidden",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
         style={{ width: isCollapsed ? 80 : 240 }} // Inline style for width to work with the class transition for transform
@@ -237,18 +237,7 @@ export function Sidebar() {
           })}
         </div>
 
-        <div className="p-4 border-t border-foreground/10">
-          <button
-            onClick={handleSignOut}
-            className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 w-full text-left text-red-500 hover:bg-red-500/10",
-              isCollapsed && "justify-center"
-            )}
-          >
-            <LogOut size={20} />
-            {!isCollapsed && <span>Sign Out</span>}
-          </button>
-        </div>
+
       </motion.aside>
     </>
   );
