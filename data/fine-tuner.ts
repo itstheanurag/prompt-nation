@@ -33,8 +33,8 @@ export const AVAILABLE_MODELS = [
     description: "Lean, nimble, and budget-friendly",
   },
   {
-    id: "qwen-3-32b",
-    label: "Qwen 3 32B",
+    id: "llama-3.1-8b-instant",
+    label: "LLama 3.1 8B Instant",
     description: "High-capacity reasoning",
   },
 ];

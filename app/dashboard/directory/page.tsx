@@ -2,13 +2,20 @@
 
 import { motion } from "motion/react";
 import { Search, Filter, MoreHorizontal, Copy, Star } from "lucide-react";
+import { useState } from "react";
+import { useUIStore } from "@/stores/ui-store";
+import { AddPromptModal, SavedPrompt } from "@/components/modals/add-prompt-modal";
 
-const prompts = [
+const INITIAL_PROMPTS: SavedPrompt[] = [
   {
     id: 1,
     title: "SEO Blog Post Generator",
     description:
       "Generates SEO-optimized blog posts with proper heading structure and keyword density.",
+    prompt: "Generate an SEO blog post...",
+    type: "text",
+    model: "GPT-4",
+    result: "",
     tags: ["Marketing", "Writing"],
     lastUsed: "2 hours ago",
     starred: true,
@@ -18,6 +25,10 @@ const prompts = [
     title: "React Component Creator",
     description:
       "Creates modern React components with Tailwind CSS and TypeScript interfaces.",
+    prompt: "Create a React component...",
+    type: "code",
+    model: "GPT-4",
+    result: "",
     tags: ["Coding", "React"],
     lastUsed: "1 day ago",
     starred: false,
@@ -26,6 +37,10 @@ const prompts = [
     id: 3,
     title: "Email Cold Outreach",
     description: "Drafts personalized cold outreach emails for B2B sales.",
+    prompt: "Draft a cold email...",
+    type: "text",
+    model: "GPT-3.5",
+    result: "",
     tags: ["Sales", "Email"],
     lastUsed: "3 days ago",
     starred: true,
@@ -34,6 +49,10 @@ const prompts = [
     id: 4,
     title: "Python Script Debugger",
     description: "Analyzes Python code for errors and suggests optimizations.",
+    prompt: "Debug this python script...",
+    type: "code",
+    model: "GPT-4",
+    result: "",
     tags: ["Coding", "Python"],
     lastUsed: "1 week ago",
     starred: false,
@@ -43,6 +62,10 @@ const prompts = [
     title: "Social Media Caption",
     description:
       "Generates engaging captions for Instagram and LinkedIn posts.",
+    prompt: "Write an Instagram caption...",
+    type: "text",
+    model: "GPT-4",
+    result: "",
     tags: ["Social Media", "Marketing"],
     lastUsed: "1 week ago",
     starred: false,
@@ -51,6 +74,10 @@ const prompts = [
     id: 6,
     title: "SQL Query Builder",
     description: "Translates natural language into complex SQL queries.",
+    prompt: "Write a SQL query...",
+    type: "code",
+    model: "GPT-4",
+    result: "",
     tags: ["Data", "SQL"],
     lastUsed: "2 weeks ago",
     starred: true,
@@ -58,8 +85,15 @@ const prompts = [
 ];
 
 export default function DirectoryPage() {
+  const [prompts, setPrompts] = useState(INITIAL_PROMPTS);
+  const { isAddPromptModalOpen, openAddPromptModal, closeAddPromptModal } = useUIStore();
+
+  const handleAddPrompt = (newPrompt: SavedPrompt) => {
+    setPrompts([newPrompt, ...prompts]);
+  };
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 relative">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground">
@@ -69,7 +103,10 @@ export default function DirectoryPage() {
             Manage and organize your collection of AI prompts.
           </p>
         </div>
-        <button className="bg-foreground text-background hover:bg-foreground/90 h-10 px-4 py-2 rounded-md font-medium transition-colors">
+        <button 
+          onClick={openAddPromptModal}
+          className="bg-foreground text-background hover:bg-foreground/90 h-10 px-4 py-2 rounded-md font-medium transition-colors"
+        >
           + New Prompt
         </button>
       </div>
@@ -146,6 +183,12 @@ export default function DirectoryPage() {
           </motion.div>
         ))}
       </div>
+
+      <AddPromptModal 
+        isOpen={isAddPromptModalOpen} 
+        onClose={closeAddPromptModal} 
+        onAdd={handleAddPrompt} 
+      />
     </div>
   );
 }

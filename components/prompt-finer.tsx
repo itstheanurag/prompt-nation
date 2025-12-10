@@ -23,6 +23,7 @@ import { useAuthStore } from "@/stores";
 import { useUIStore } from "@/stores/ui-store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { fineTunePrompt } from "@/actions/fine-tune";
 
 export function PromptFineTuner({
   showHeader = true,
@@ -72,21 +73,30 @@ export function PromptFineTuner({
     }
 
     setIsLoading(true);
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
+    
     // Check if we have a predefined response for this input
     if (PREDEFINED_RESPONSES[input]) {
       setOutput(PREDEFINED_RESPONSES[input]);
-    } else {
-      // Fallback to generic generation
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const result = await fineTunePrompt(input);
+      if (result) {
+        setOutput(result);
+      }
+    } catch (error) {
+      console.warn("AI Generation failed (likely no key), falling back to mocks", error);
+       // Fallback to generic generation
       setOutput({
         text: MOCK_RESPONSES.text(input),
         json: MOCK_RESPONSES.json(input),
         toon: MOCK_RESPONSES.toon(input),
       });
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const handleCopy = (text: string) => {

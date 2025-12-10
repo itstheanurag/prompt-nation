@@ -4,10 +4,18 @@ import { useAuthStore } from "@/stores";
 import { Menu, LogOut } from "lucide-react";
 import { useEffect } from "react";
 import { useUIStore } from "@/stores/ui-store";
+import { useRouter } from "next/navigation";
+
 
 export function Header() {
   const { user, fetchSession, signOut } = useAuthStore();
   const { toggleSidebar } = useUIStore();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/");
+  };
 
   useEffect(() => {
     fetchSession();
@@ -49,7 +57,7 @@ export function Header() {
               </p>
               <div className="h-px bg-foreground/10 my-2" />
               <button
-                onClick={() => signOut()}
+                onClick={handleSignOut}
                 className="w-full text-left text-xs text-red-500 hover:bg-red-500/10 p-1.5 rounded-md transition-colors flex items-center gap-2"
               >
                 <LogOut size={14} />
