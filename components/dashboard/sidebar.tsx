@@ -15,6 +15,7 @@ import {
   User,
   ChevronDown,
 } from "lucide-react";
+import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAuthStore } from "@/stores";
@@ -59,6 +60,7 @@ export function Sidebar() {
 
   const handleSignOut = async () => {
     await signOut();
+    toast.success("Logged out successfully");
     router.push("/");
   };
 

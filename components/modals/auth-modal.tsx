@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Github, Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       });
     } catch (error) {
       console.error("Login failed:", error);
+      toast.error("Login failed. Please try again.");
       setIsLoading(null);
     }
   };

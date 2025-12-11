@@ -2,6 +2,7 @@
 
 import { useAuthStore } from "@/stores";
 import { Menu, LogOut } from "lucide-react";
+import { toast } from "sonner";
 import { useEffect } from "react";
 import { useUIStore } from "@/stores/ui-store";
 import { useRouter } from "next/navigation";
@@ -14,6 +15,7 @@ export function Header() {
 
   const handleSignOut = async () => {
     await signOut();
+    toast.success("Logged out successfully");
     router.push("/");
   };
 

@@ -106,3 +106,21 @@ export async function getPromptHistory() {
 
   return history;
 }
+
+export async function deletePrompt(id: string) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user?.id) {
+    throw new Error("Unauthorized");
+  }
+
+  await db
+    .delete(savedPrompts)
+    .where(eq(savedPrompts.id, id) && eq(savedPrompts.userId, session.user.id));
+
+  revalidatePath("/dashboard/directory/saved");
+  revalidatePath("/dashboard/directory");
+  return { success: true };
+}
