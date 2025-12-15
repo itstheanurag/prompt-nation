@@ -3,20 +3,23 @@
 import { createPortal } from "react-dom";
 import { useState, useEffect, useTransition } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Plus, Image as ImageIcon, Loader2 } from "lucide-react";
+import { X, Save, Loader2, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
-import { savePrompt } from "@/actions/prompts";
+import { updatePrompt } from "@/actions/prompts";
 import { usePromptsStore, type SavedPrompt } from "@/stores/prompts-store";
+import { useUIStore } from "@/stores/ui-store";
 
-interface AddPromptModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export function AddPromptModal({ isOpen, onClose }: AddPromptModalProps) {
+export function EditPromptModal() {
   const [mounted, setMounted] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const { addPrompt, removePrompt } = usePromptsStore();
+  const { isEditPromptModalOpen, editingPrompt, closeEditPromptModal } =
+    useUIStore();
+
+  const {
+    updatePrompt: updatePromptInStore,
+    rollback,
+    getPreviousState,
+  } = usePromptsStore();
 
   const [formData, setFormData] = useState({
     title: "",
@@ -33,66 +36,47 @@ export function AddPromptModal({ isOpen, onClose }: AddPromptModalProps) {
     return () => setMounted(false);
   }, []);
 
-  const resetForm = () => {
-    setFormData({
-      title: "",
-      prompt: "",
-      description: "",
-      type: "text",
-      model: "",
-      result: "",
-      mediaUrl: "",
-    });
-  };
+  useEffect(() => {
+    if (editingPrompt) {
+      setFormData({
+        title: editingPrompt.title || "",
+        prompt: editingPrompt.prompt || "",
+        description: editingPrompt.description || "",
+        type: editingPrompt.type || "text",
+        model: editingPrompt.model || "",
+        result: editingPrompt.result || "",
+        mediaUrl: editingPrompt.mediaUrl || "",
+      });
+    }
+  }, [editingPrompt]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Create optimistic prompt
-    const optimisticId = crypto.randomUUID();
-    const now = new Date();
-    const optimisticPrompt: SavedPrompt = {
-      id: optimisticId,
-      userId: "", // Will be set by server
+    if (!editingPrompt) return;
+
+    const previousPrompts = getPreviousState();
+    const updateData = {
       title: formData.title,
-      description: formData.description || formData.prompt,
       prompt: formData.prompt,
+      description: formData.description || formData.prompt,
       type: formData.type,
-      model: formData.model || null,
-      result: formData.result || null,
-      mediaUrl: formData.mediaUrl || null,
-      tags: [formData.type, "Custom"],
-      starred: false,
-      lastUsed: null,
-      createdAt: now,
-      updatedAt: now,
+      model: formData.model || undefined,
+      result: formData.result || undefined,
+      mediaUrl: formData.mediaUrl || undefined,
     };
 
-    // Optimistic add
-    addPrompt(optimisticPrompt);
-    onClose();
-    resetForm();
+    // Optimistic update
+    updatePromptInStore(editingPrompt.id, updateData);
+    closeEditPromptModal();
 
     startTransition(async () => {
-      const result = await savePrompt({
-        title: formData.title,
-        prompt: formData.prompt,
-        description: formData.description,
-        type: formData.type,
-        model: formData.model || undefined,
-        result: formData.result || undefined,
-        mediaUrl: formData.mediaUrl || undefined,
-        tags: [formData.type, "Custom"],
-      });
-
-      if (result.success && result.id) {
-        // Remove optimistic and add real one
-        // Note: revalidatePath will refresh the data, but we could also update the ID
-        toast.success("Prompt saved successfully");
+      const result = await updatePrompt(editingPrompt.id, updateData);
+      if (result.success) {
+        toast.success("Prompt updated successfully");
       } else {
-        // Rollback on error
-        removePrompt(optimisticId);
-        toast.error(result.error || "Failed to save prompt");
+        rollback(previousPrompts);
+        toast.error(result.error || "Failed to update prompt");
       }
     });
   };
@@ -101,14 +85,14 @@ export function AddPromptModal({ isOpen, onClose }: AddPromptModalProps) {
 
   return createPortal(
     <AnimatePresence>
-      {isOpen && (
+      {isEditPromptModalOpen && editingPrompt && (
         <>
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={closeEditPromptModal}
             className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[200]"
           />
 
@@ -121,16 +105,16 @@ export function AddPromptModal({ isOpen, onClose }: AddPromptModalProps) {
           >
             <div className="bg-background border border-foreground/10 rounded-2xl shadow-2xl p-6 relative overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar">
               <button
-                onClick={onClose}
+                onClick={closeEditPromptModal}
                 className="absolute top-4 right-4 p-2 text-foreground/40 hover:text-foreground transition-colors z-10"
               >
                 <X className="w-4 h-4" />
               </button>
 
               <div className="mb-6">
-                <h2 className="text-2xl font-bold">Add New Prompt</h2>
+                <h2 className="text-2xl font-bold">Edit Prompt</h2>
                 <p className="text-foreground/60 text-sm">
-                  Save your engineered prompt to your library.
+                  Update your saved prompt details.
                 </p>
               </div>
 
@@ -235,7 +219,7 @@ export function AddPromptModal({ isOpen, onClose }: AddPromptModalProps) {
                 <div className="pt-4 flex justify-end gap-3">
                   <button
                     type="button"
-                    onClick={onClose}
+                    onClick={closeEditPromptModal}
                     className="px-4 py-2 rounded-lg hover:bg-foreground/5 transition-colors"
                   >
                     Cancel
@@ -248,9 +232,9 @@ export function AddPromptModal({ isOpen, onClose }: AddPromptModalProps) {
                     {isPending ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
-                      <Plus className="w-4 h-4" />
+                      <Save className="w-4 h-4" />
                     )}
-                    Save Prompt
+                    Save Changes
                   </button>
                 </div>
               </form>
@@ -262,7 +246,3 @@ export function AddPromptModal({ isOpen, onClose }: AddPromptModalProps) {
     document.body
   );
 }
-
-// Re-export the SavedPrompt type from the store for backward compatibility
-export type { SavedPrompt } from "@/stores/prompts-store";
-
