@@ -1,96 +1,41 @@
 "use client";
 
-import { motion } from "motion/react";
-import { Search, Filter, MoreHorizontal, Copy, Star } from "lucide-react";
-import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { Search, Filter, Loader2, FolderOpen, Plus } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useUIStore } from "@/stores/ui-store";
-import { AddPromptModal, SavedPrompt } from "@/components/modals/add-prompt-modal";
-
-const INITIAL_PROMPTS: SavedPrompt[] = [
-  {
-    id: 1,
-    title: "SEO Blog Post Generator",
-    description:
-      "Generates SEO-optimized blog posts with proper heading structure and keyword density.",
-    prompt: "Generate an SEO blog post...",
-    type: "text",
-    model: "GPT-4",
-    result: "",
-    tags: ["Marketing", "Writing"],
-    lastUsed: "2 hours ago",
-    starred: true,
-  },
-  {
-    id: 2,
-    title: "React Component Creator",
-    description:
-      "Creates modern React components with Tailwind CSS and TypeScript interfaces.",
-    prompt: "Create a React component...",
-    type: "code",
-    model: "GPT-4",
-    result: "",
-    tags: ["Coding", "React"],
-    lastUsed: "1 day ago",
-    starred: false,
-  },
-  {
-    id: 3,
-    title: "Email Cold Outreach",
-    description: "Drafts personalized cold outreach emails for B2B sales.",
-    prompt: "Draft a cold email...",
-    type: "text",
-    model: "GPT-3.5",
-    result: "",
-    tags: ["Sales", "Email"],
-    lastUsed: "3 days ago",
-    starred: true,
-  },
-  {
-    id: 4,
-    title: "Python Script Debugger",
-    description: "Analyzes Python code for errors and suggests optimizations.",
-    prompt: "Debug this python script...",
-    type: "code",
-    model: "GPT-4",
-    result: "",
-    tags: ["Coding", "Python"],
-    lastUsed: "1 week ago",
-    starred: false,
-  },
-  {
-    id: 5,
-    title: "Social Media Caption",
-    description:
-      "Generates engaging captions for Instagram and LinkedIn posts.",
-    prompt: "Write an Instagram caption...",
-    type: "text",
-    model: "GPT-4",
-    result: "",
-    tags: ["Social Media", "Marketing"],
-    lastUsed: "1 week ago",
-    starred: false,
-  },
-  {
-    id: 6,
-    title: "SQL Query Builder",
-    description: "Translates natural language into complex SQL queries.",
-    prompt: "Write a SQL query...",
-    type: "code",
-    model: "GPT-4",
-    result: "",
-    tags: ["Data", "SQL"],
-    lastUsed: "2 weeks ago",
-    starred: true,
-  },
-];
+import { usePromptsStore } from "@/stores/prompts-store";
+import { AddPromptModal } from "@/components/modals/add-prompt-modal";
+import { EditPromptModal } from "@/components/modals/edit-prompt-modal";
+import { SavedPromptCard } from "@/components/directory/saved-prompt-card";
+import { getSavedPrompts } from "@/actions/prompts";
 
 export default function DirectoryPage() {
-  const [prompts, setPrompts] = useState(INITIAL_PROMPTS);
-  const { isAddPromptModalOpen, openAddPromptModal, closeAddPromptModal } = useUIStore();
+  const { prompts, isLoading, setPrompts, setLoading } = usePromptsStore();
+  const { isAddPromptModalOpen, openAddPromptModal, closeAddPromptModal } =
+    useUIStore();
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleAddPrompt = (newPrompt: SavedPrompt) => {
-    setPrompts([newPrompt, ...prompts]);
-  };
+  // Fetch prompts on mount
+  useEffect(() => {
+    const fetchPrompts = async () => {
+      setLoading(true);
+      const data = await getSavedPrompts();
+      setPrompts(data);
+    };
+    fetchPrompts();
+  }, [setPrompts, setLoading]);
+
+  // Filter prompts based on search
+  const filteredPrompts = prompts.filter(
+    (prompt) =>
+      prompt.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prompt.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prompt.prompt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prompt.tags?.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+  );
 
   return (
     <div className="space-y-8 relative">
@@ -103,11 +48,12 @@ export default function DirectoryPage() {
             Manage and organize your collection of AI prompts.
           </p>
         </div>
-        <button 
+        <button
           onClick={openAddPromptModal}
-          className="bg-foreground text-background hover:bg-foreground/90 h-10 px-4 py-2 rounded-md font-medium transition-colors"
+          className="bg-foreground text-background hover:bg-foreground/90 h-10 px-4 py-2 rounded-md font-medium transition-colors flex items-center gap-2"
         >
-          + New Prompt
+          <Plus className="w-4 h-4" />
+          New Prompt
         </button>
       </div>
 
@@ -117,6 +63,8 @@ export default function DirectoryPage() {
           <input
             type="text"
             placeholder="Search prompts..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-10 pl-10 pr-4 rounded-md bg-foreground/5 border border-foreground/10 focus:ring-2 focus:ring-foreground/20 focus:border-foreground/20 transition-all text-sm placeholder:text-foreground/40 text-foreground"
           />
         </div>
@@ -126,69 +74,55 @@ export default function DirectoryPage() {
         </button>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {prompts.map((prompt, i) => (
-          <motion.div
-            key={prompt.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className="group relative p-6 rounded-2xl border border-foreground/10 bg-background/60 backdrop-blur-md hover:shadow-lg hover:border-foreground/20 transition-all duration-300 flex flex-col"
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex gap-2">
-                {prompt.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-1 rounded-md bg-foreground/5 text-xs font-medium text-foreground/60"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <button className="text-foreground/40 hover:text-foreground transition-colors">
-                <MoreHorizontal size={16} />
-              </button>
-            </div>
-
-            <h3 className="text-lg font-semibold mb-2 group-hover:text-foreground transition-colors text-foreground">
-              {prompt.title}
+      {isLoading ? (
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-foreground/40" />
+        </div>
+      ) : filteredPrompts.length === 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-center justify-center py-20 text-center space-y-4 border border-dashed border-foreground/10 rounded-2xl bg-foreground/[0.02]"
+        >
+          <div className="w-16 h-16 rounded-full bg-foreground/5 flex items-center justify-center">
+            <FolderOpen className="w-8 h-8 text-foreground/40" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-lg font-semibold">
+              {searchQuery ? "No matching prompts" : "No prompts yet"}
             </h3>
-            <p className="text-sm text-foreground/60 mb-6 line-clamp-2 flex-1">
-              {prompt.description}
+            <p className="text-foreground/60 max-w-sm mx-auto">
+              {searchQuery
+                ? "Try adjusting your search query."
+                : "Create your first prompt to get started."}
             </p>
+          </div>
+          {!searchQuery && (
+            <button
+              onClick={openAddPromptModal}
+              className="mt-4 flex items-center gap-2 px-4 py-2 bg-foreground text-background rounded-lg font-medium text-sm hover:opacity-90 transition-opacity"
+            >
+              <Plus className="w-4 h-4" />
+              Create Prompt
+            </button>
+          )}
+        </motion.div>
+      ) : (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {filteredPrompts.map((prompt, i) => (
+              <SavedPromptCard key={prompt.id} prompt={prompt} index={i} />
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
 
-            <div className="flex items-center justify-between pt-4 border-t border-foreground/10">
-              <span className="text-xs text-foreground/40">
-                Used {prompt.lastUsed}
-              </span>
-              <div className="flex gap-2">
-                <button
-                  className={`p-2 rounded-md transition-colors ${
-                    prompt.starred
-                      ? "text-amber-400 bg-amber-400/10"
-                      : "text-foreground/40 hover:bg-foreground/5"
-                  }`}
-                >
-                  <Star
-                    size={16}
-                    fill={prompt.starred ? "currentColor" : "none"}
-                  />
-                </button>
-                <button className="p-2 rounded-md text-foreground/40 hover:bg-foreground/5 hover:text-foreground transition-colors">
-                  <Copy size={16} />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      <AddPromptModal 
-        isOpen={isAddPromptModalOpen} 
-        onClose={closeAddPromptModal} 
-        onAdd={handleAddPrompt} 
+      <AddPromptModal
+        isOpen={isAddPromptModalOpen}
+        onClose={closeAddPromptModal}
       />
+      <EditPromptModal />
     </div>
   );
 }
+
